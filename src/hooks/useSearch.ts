@@ -1,11 +1,11 @@
 import { ref } from "vue";
 import {axiosApi} from '@/api/indexApi'
-import type {paramsInterface} from '@/types/indexTypes'
+import type {IParams} from '@/types/indexTypes'
 
 
 export default function(){
   // 定义一个响应式数组用于放置收到的数据 
-  let mainList = ref([{
+  let mainSkillList = ref([{
     compulsory:'',
     equipmentModel:'',
     equipmentType:'',
@@ -19,7 +19,7 @@ export default function(){
     skillType:'',
   }])
   // 请求函数
-  async function getSearchList(params:paramsInterface) {
+  async function getSearchList(params:IParams) {
     const filterparams = Object.fromEntries( //fromEntries把括号内的值变成对象
       // entries会返回一个给定对象自身可枚举属性的键值对数组
       Object.entries(params)
@@ -30,11 +30,10 @@ export default function(){
     await axiosApi({
       method:"get",
       url:"/worker/getskilldetail1/H6616040", 
-      params:filterparams
+      params:filterparams,
     }).then(res => {
-      mainList.value = res.data.data
-      console.log(mainList);
-    }).catch(err => console.log(err))
+      mainSkillList.value = res.data.data
+    }).catch(err => console.log("搜索请求错误",err))
   }
-  return {mainList,getSearchList}
+  return {mainSkillList,getSearchList}
 }

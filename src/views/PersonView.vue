@@ -5,7 +5,7 @@
       <div class="wordlist">
         <ul>  
           <!-- 每次遍历的时候添加上对应的数据 -->
-          <li v-for="(value,key) in wordList1" :key="key">
+          <li v-for="(value,key) in data[0]" :key="key">
             <span>{{ value }}</span>
             <span class="listNumber">{{ messageList[key] }}</span>
           </li>
@@ -13,7 +13,7 @@
       </div>
       <div class="wordlist">
         <ul>
-          <li v-for="(value,key,index) in wordList2" :key="key">
+          <li v-for="(value,key,index) in data[1]" :key="key">
             <!-- 通过遍历动态添加类名 -->
             <span :class="{'n2': index < 2}">{{ value }}</span>
             <span class="listNumber" >{{ messageList[key] }}</span>
@@ -28,58 +28,29 @@
     <div class="container">
       <div class="table-name">獎懲記錄:</div>
       <table class="punish">
-        <thead>
-          <tr>
-            <th>工號</th>
-            <th>姓名</th>
-            <th>部門</th>
-            <th>課別</th>
-            <th>獎懲</th>
-            <th>日期</th>
-            <th>奖惩原因</th>
-            <th>奖惩结果</th>
-            <th>備註</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>H1234567</td>
-            <td>劉亦菲</td>
-            <td>EE2</td>
-            <td>AOI</td>
-            <td>獎勵</td>
-            <td>2024/2/1</td>
-            <td>扶老奶奶過馬路</td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>H1234567</td>
-            <td>劉亦菲</td>
-            <td>EE2</td>
-            <td>AOI</td>
-            <td>獎勵</td>
-            <td>2024/2/1</td>
-            <td>扶老奶奶過馬路</td>
-            <td></td>
-            <td></td>
-          </tr>
-        </tbody>
+        <tr>
+          <th v-for="(item) in data[2]">{{item}}</th>
+        </tr>
+        <tr>
+          <td>H1234567</td>
+          <td>劉亦菲</td>
+          <td>EE2</td>
+          <td>AOI</td>
+          <td>獎勵</td>
+          <td>2024/2/1</td>
+          <td>扶老奶奶過馬路</td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
       </table>
     </div>
     <div class="container">
       <div class="table-name">工作履歷</div>
       <table class="history">
-        <thead>
-          <tr>
-            <th>工號</th>
-            <th>姓名</th>
-            <th>部門</th>
-            <th>課別</th>
-            <th>日期</th>
-            <th>詳細信息</th>
-          </tr>
-        </thead>
+        <tr>
+          <th v-for="(item) in data[3]">{{item}}</th>
+        </tr>
         <tbody>
           <tr>
             <td>H1234567</td>
@@ -88,13 +59,6 @@
             <td>AOI</td>
             <td>2024/2/1</td>
             <td>負責工作人員的每日調度</td>
-          </tr>
-          <tr>
-            <td>H1234567</td>
-            <td>劉亦菲</td>
-            <td>EE2</td>
-            <td>AOI</td>
-            <td>2024/2/1</td>
             <td>負責工作人員的每日調度</td>
           </tr>
         </tbody>
@@ -106,26 +70,69 @@
 <script setup lang="ts" name="PersonView">
   import {axiosApi} from '@/api/indexApi';
   import { onMounted, reactive } from 'vue';
-  const wordList1 = {
-    userid:'工號：',
-    username:'姓名：',
-    sex:'性別：',
-    ziwei:'資位：',
-    zhiwei:'職位：',
-    louceng:'樓層：',
-    address:'籍貫：',
-    nianci:'年資：'
-  }
-  const wordList2 = {
-    chu: "事業處：",
-    bu: "事業部：",
-    group1: "團隊一級：",
-    group2: "團隊二級：",
-    group3: "團隊三級：",
-    workdate: "入廠日期：",
-    birthday: "出生日期：",
-    phone: "聯繫方式：",
-  }
+  // const wordList1 = {
+  //   userid:'工號：',
+  //   username:'姓名：',
+  //   sex:'性別：',
+  //   ziwei:'資位：',
+  //   zhiwei:'職位：',
+  //   louceng:'樓層：',
+  //   address:'籍貫：',
+  //   nianci:'年資：'
+  // }
+  // const wordList2 = {
+  //   chu: "事業處：",
+  //   bu: "事業部：",
+  //   group1: "團隊一級：",
+  //   group2: "團隊二級：",
+  //   group3: "團隊三級：",
+  //   workdate: "入廠日期：",
+  //   birthday: "出生日期：",
+  //   phone: "聯繫方式：",
+  // }
+  const data = [
+    {
+      userid:'工號：',
+      username:'姓名：',
+      sex:'性別：',
+      ziwei:'資位：',
+      zhiwei:'職位：',
+      louceng:'樓層：',
+      address:'籍貫：',
+      nianci:'年資：'
+    },
+    {
+      chu: "事業處：",
+      bu: "事業部：",
+      group1: "團隊一級：",
+      group2: "團隊二級：",
+      group3: "團隊三級：",
+      workdate: "入廠日期：",
+      birthday: "出生日期：",
+      phone: "聯繫方式：",
+    },
+    {
+      userid:'工號',
+      username:'姓名',
+      group1: "團隊一級",
+      group2: "團隊二級",
+      group3: "團隊三級",
+      date:'日期',
+      rewards:'奖惩',
+      rewardsdata:'奖惩原因',
+      rewardsresult:'奖惩结果',
+      note:'备注',
+    },
+    {
+      userid:'工號',
+      username:'姓名',
+      group1: "團隊一級",
+      group2: "團隊二級",
+      group3: "團隊三級",
+      date:'日期',
+      message:'详细信息'
+    }
+  ]
   let messageList = reactive({
     userid: "",
     username: "",
@@ -144,6 +151,12 @@
     birthday: "",
     phone: "",
     zhanScore:"",
+    rewards:'',
+    date:'',
+    rewardsdata:'',
+    rewardsresult:'',
+    note:'',
+    message:'',
   })
 
   // 在页面开始挂载时触发
@@ -153,7 +166,6 @@
       method:"post"
     }).then(res => {
       messageList = Object.assign(messageList,res.data.data)
-      console.log(messageList);
     })
  })
 </script>
@@ -161,35 +173,34 @@
 <style scoped>
 /* 基础设置 */
 .person{
-  padding-right: 90px;
+  padding-right: 20px;
 }
-.top,
-.container,
-table {
-  width: 950px;
-}
-
 /* 上半部分设置 */
 .top {
   display: flex;
   justify-content: space-between;
-  height: 300px;
+  height: 100%;
   margin-bottom: 40px;
 }
 .photo {
   width: 200px;
-  height: 240px;
-  margin-top: 50px;
+  height: 100%;
+  margin: 30px;
   border: 2px solid black;
 }
 .wordlist {
+  min-width: 190px;
   font-size: 16px;
   height: 100%;
   display: flex;
   flex-direction: column;
   line-height: 25px;
+  padding: auto 0;
   & ul{
-    margin-top: 60px;
+    padding-top: 40px;
+    & li{
+      padding: 2px 0;
+    }
   }
 }
 .fight {
@@ -198,6 +209,7 @@ table {
   width: 130px;
   text-align: center;
   position: relative;
+  margin-right: 30px;
   &::before,
   &::after{
     content: '';
@@ -242,8 +254,10 @@ table {
   vertical-align: middle;
   font-size: 15px;
   background-color:#313131;
+  width: 100%;
+  min-width: 800px;
 }
-thead{
+th{
   font-size: 20px;
 }
 td,

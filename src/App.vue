@@ -1,12 +1,7 @@
 <template>
   <div class="app">
-    <div class="navigate">
-      <RouterLink active-class="active" to="/person">個人信息</RouterLink>
-      <RouterLink active-class="active" to="/skill">技能列表</RouterLink>
-      <RouterLink active-class="active" to="/personSkill">個人技能明細</RouterLink>
-      <RouterLink active-class="active" to="/AddSkill">新增技能明細</RouterLink>
-      <RouterLink active-class="" to="/skill">skill</RouterLink>
-      <RouterLink active-class="" to="/skill">skill</RouterLink>
+    <div class="navigate" ref="navigate">
+      <Navbar/>
     </div>
     <!-- <div class="top-nav">
       <ul>
@@ -26,6 +21,17 @@
 
 <script lang="ts" setup>
   import { RouterLink,RouterView } from 'vue-router';
+  import Navbar from './components/Navbar.vue';
+import { onMounted, onUpdated, ref } from 'vue';
+onMounted(() => {
+  window.addEventListener('resize', () => {
+    if(window.innerWidth < 1000){
+      document.documentElement.style.setProperty('--nav-width', '64px');
+    } else {
+      document.documentElement.style.setProperty('--nav-width', '200px');
+    }
+  });
+});
 
 </script>
 
@@ -35,44 +41,11 @@ h1 {
   font-size: 50px;
   font-weight: bolder;
 }
-.navigate {
-  width: 200px;
-  height: 100vh;
-  display: flex;
-  left: 0;
-  top: 0;
-  flex-direction: column;
-  position: fixed;
-  border-radius: 10px;
-  padding: 0 50px;
-  margin-top: 60px;
-}
-.navigate a {
-  height: 30px;
-  line-height: 30px;
-  font-size: 15px;
-  text-align: center;
-  margin-top: 5px;
-  text-decoration: none;
-  display: block;
-  text-decoration: none;
-  color: #333;
-  &:hover{
-    background-color: #64967e3f;
-    border-radius: 50px;
-    transition: 0.5s;
-  }
-}
-.navigate a.active{
-  background-color: #64967E !important; 
-  color: #ffc268;
-  border-radius: 50px;
-  text-shadow: 0 0 100px black;
-}
 .main-content {
-  margin-left: 280px;
+  padding-left: calc(var(--nav-width) + 30px);
   border-bottom: 0;
   border-left: 0;
+  min-width: 710px;
   overflow: hidden;
 }
 </style>

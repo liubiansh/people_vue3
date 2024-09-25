@@ -15,7 +15,7 @@
         </tr>
         <tr>
           <td>
-            <el-select class="top-select" v-model="skillType" placeholder="請選擇">
+            <el-select class="top-select" v-model="skillType" placeholder="全部">
               <el-option
                 v-for="item in skillTypeData"
                 :key="item.value"
@@ -25,7 +25,7 @@
             </el-select>
           </td>
           <td>
-            <el-select class="top-select" v-model="equipmentType" placeholder="請選擇">
+            <el-select class="top-select" v-model="equipmentType" placeholder="全部">
               <el-option
                 v-for="item in equipmentTypeData"
                 :key="item.value"
@@ -35,7 +35,7 @@
             </el-select>
           </td>
           <td>
-            <el-select class="top-select" v-model="equipmentModel" placeholder="請選擇">
+            <el-select class="top-select" v-model="equipmentModel" placeholder="全部">
               <el-option
                 v-for="item in equipmentModelData"
                 :key="item.value"
@@ -45,7 +45,7 @@
             </el-select>
           </td>
           <td>
-            <el-select class="top-select" v-model="skillLevel" placeholder="請選擇">
+            <el-select class="top-select" v-model="skillLevel" placeholder="全部">
               <el-option
                 v-for="item in skillLevelOptions"
                 :key="item.value"
@@ -55,7 +55,7 @@
             </el-select>
           </td>
           <td>
-            <el-select class="top-select" v-model="compulsory" placeholder="請選擇">
+            <el-select class="top-select" v-model="compulsory" placeholder="全部">
               <el-option
                 v-for="item in compulsoryOptions"
                 :key="item.value"
@@ -65,7 +65,7 @@
             </el-select>
           </td>
           <td>
-            <el-select class="top-select" v-model="evaluationMethod" placeholder="請選擇">
+            <el-select class="top-select" v-model="evaluationMethod" placeholder="全部">
               <el-option
                 v-for="item in evaluationMethodOptions"
                 :key="item.value"
@@ -75,7 +75,7 @@
             </el-select>
           </td>
           <td>
-            <el-select class="top-select" v-model="evaluationResult" placeholder="請選擇">
+            <el-select class="top-select" v-model="evaluationResult" placeholder="全部">
               <el-option
                 v-for="item in evaluationResultOptions"
                 :key="item.value"
@@ -92,11 +92,11 @@
     </div>
     <!-- 内容区 -->
     <div>
-      <table v-if="mainList && mainList.length > 0"  class="main-table">
+      <table v-if="mainSkillList && mainSkillList.length > 0"  class="main-table">
         <tr>
           <th v-for="(item,index) in mainListHeader" :key="index">{{ item }}</th>
         </tr>
-        <tr v-for="(item,index) in mainList" :key="item.id">
+        <tr v-for="(item,index) in mainSkillList" :key="index">
           <td>{{ index + 1 }}</td>
           <td>{{ item.skillType }}</td>
           <td>{{ item.equipmentType }}</td>
@@ -112,7 +112,7 @@
             <button @click="startStudy">開始學習</button>
           </td>
           <td>
-            <button @click="startEvaluation">開始考覈</button>
+            <button @click="startEvaluation">開始考核</button>
           </td>
         </tr>
       </table>
@@ -127,12 +127,12 @@
   import { ref,onMounted } from 'vue'
   import { storeToRefs } from 'pinia';
   // 引入从后端获取技能类型等的数据
-  import {usePersonSkillStore} from '@/store/PersonSkillStore'
+  import {usePSkillStore} from '@/store/PersonSkillStore'
   // 引入搜索 hooks
   import useSearch from "@/hooks/useSearch"
 
   // 使用搜索 hooks
-  const {mainList,getSearchList} = useSearch()
+  const {mainSkillList,getSearchList} = useSearch()
 
   // 定义下拉框绑定的数据
   const skillType = ref('')
@@ -143,11 +143,11 @@
   const evaluationMethod = ref('')
   const evaluationResult = ref('')
   // 表头数据
-  const mainListHeader = ["序號","技能類型","設備類型","設備型號","技能等級","技能明細","必修否","考覈方式","考覈次數","考覈結果","考官姓名","學習","考覈"]
+  const mainListHeader = ["序號","技能類型","設備類型","設備型號","技能等級","技能明細","必修否","考核方式","考核次數","考核結果","考官姓名","學習","考核"]
   // 技能等级
   const skillLevelOptions = [
     {
-      value:'全部',
+      value:'',
       label:'全部'
     },
     {
@@ -166,7 +166,7 @@
   // 必修否
   const compulsoryOptions = [
     {
-      value:'全部',
+      value:'',
       label:'全部'
     },
     {
@@ -181,22 +181,22 @@
   // 考核方式
   const evaluationMethodOptions = [
     {
-      value:'全部',
+      value:'',
       label:'全部'
     },
     {
-      value: '線上考覈',
-      label: '線上考覈',
+      value: '線上考核',
+      label: '線上考核',
     },
     {
-      value: '線下考覈',
-      label: '線下考覈',
+      value: '線下考核',
+      label: '線下考核',
     },
   ]
   // 考核结果
   const evaluationResultOptions = [
     {
-      value:'全部',
+      value:'',
       label:'全部'
     },
     {
@@ -210,22 +210,21 @@
   ]
 
   // 使用集中式状态管理器
-  const personskillstore = usePersonSkillStore()
+  const pskillstore = usePSkillStore()
   // 把数据从状态管理器中拿出来并进行响应式设置
   const {
     skillTypeData,
     equipmentModelData,
     equipmentTypeData
-  } = storeToRefs(personskillstore)
+  } = storeToRefs(pskillstore)
   // 定义用于实现调取数据的函数
-  function getPersonSkillList(){
-    personskillstore.getPersonSkillList()
+  function getPSkillList(){
+    pskillstore.getPSkillList()
   }
-
 
   // 在挂载后触发调取函数
   onMounted(() => {
-    getPersonSkillList()
+    getPSkillList()
     search()
   })
   

@@ -14,6 +14,21 @@ export function useEcharts() {
     if (chartInstance) {
       chartInstance.setOption(options);
     }
+    // let option = {
+    //   xAxis: {
+    //     type: 'category',
+    //     data: [options]
+    //   },
+    //   yAxis: {
+    //     type: 'value'
+    //   },
+    //   series: [
+    //     {
+    //       data: [120, 200, 150, 80, 70, 110, 130],
+    //       type: 'bar'
+    //     }
+    //   ]
+    // };
   };
 
   // 四、更新图表数据

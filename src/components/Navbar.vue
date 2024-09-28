@@ -51,6 +51,9 @@ const isCollapse = ref(false)
 let activeMenuItem = sessionStorage.getItem('activeMenuItem')
 const initActive = localStorage.getItem('activeMenuItem')
 
+// let isShow = defineProps(['send'])
+// isShow.send(isCollapse)
+
  
 // 监听窗口实现导航栏的缩放
 onMounted(() => {
@@ -94,8 +97,9 @@ function defaultActive(value:string){
   flex-direction: column;
   position: fixed;
   border-radius: 10px;
-  padding-top: 70px;
-  padding-left: 2vw;
+  /* padding-top: 70px;
+  padding-left: 2vw; */
+  z-index: 100;
 }
 .el-menu-vertical-demo {
   border-radius: 10px;

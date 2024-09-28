@@ -12,7 +12,6 @@ export interface IParams {
 // 技能列表数据接口
 export interface ISkillList {
   skillLevel?:'',
-  num?:number
   compulsory?:'',
   equipmentModel?:'',
   equipmentType?:'',
@@ -21,7 +20,19 @@ export interface ISkillList {
   evaluationResult?:'',
   examiner?:'',
   skillDetail?:'',
-  skillType?:'',
+  skillType:'',
+  learnBase?:'',
+  learnMiddle?:'',
+  learnHigh?:'',
+  ratioBase?:'',
+  ratioHigh?:'',
+  ratioMiddle?:'',
+  totalBase?:'',
+  totalMiddle?:'',
+  totalHigh?:'',
+  unlearnBase?:'',
+  unlearnMiddle?:'',
+  unlearnHigh?:'',
 }
 
 export interface IRoutes {

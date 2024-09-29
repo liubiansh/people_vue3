@@ -2,7 +2,7 @@
   <el-row class="navigate">
     <el-col>
       <el-menu
-        :default-active="activeMenuItem || initActive || 'person'"
+        :default-active="activeMenuItem || 'person'"
         class="el-menu-vertical-demo"
         :router="true"
         :collapse="isCollapse"
@@ -49,7 +49,6 @@ import { onBeforeUnmount, onMounted, ref } from 'vue';
 
 const isCollapse = ref(false)
 let activeMenuItem = sessionStorage.getItem('activeMenuItem')
-const initActive = localStorage.getItem('activeMenuItem')
 
 // let isShow = defineProps(['send'])
 // isShow.send(isCollapse)

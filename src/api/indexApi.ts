@@ -2,9 +2,9 @@ import axios from "axios";
 
 const axiosApi = axios.create({
   // 上线用
-  // baseURL:'http://192.168.0.3:80/yang/api',
+  baseURL:'http://192.168.0.3:80/yang/api',
   // 开发用
-  baseURL:'http://192.168.0.3:80/api',
+  // baseURL:'http://192.168.0.3:80/api',
   timeout:2000,
   headers: {
     'Access-Control-Allow-Origin': 'hly-yyp',

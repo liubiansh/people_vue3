@@ -23,10 +23,10 @@ export function useEcharts() {
       color: '#333'
     },
     grid: {
-      top: '28%'
+      top: '25%'
     },
-    width: 480,
-    height: 100,
+    width: "80%",
+    height: '53%',
     xAxis: {
       type: 'category',
       axisLabel: { interval: 0 }

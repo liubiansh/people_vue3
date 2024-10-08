@@ -1,4 +1,4 @@
-// 路径接口
+// 路径参数接口
 export interface IParams {
   skillType?:string,
   equipmentType?:string,
@@ -7,6 +7,9 @@ export interface IParams {
   compulsory?:string,
   evaluationMethod?:string,
   evaluationResult?:string,
+  skillDetail?:string,
+  evaluationCount?:string,
+  examiner?:string,
 }
 
 // 技能列表数据接口
@@ -35,6 +38,7 @@ export interface ISkillList {
   unlearnHigh:'',
 }
 
+// 路由组件的类型
 export interface IRoutes {
   name:string,
   path:string,
@@ -45,3 +49,31 @@ export interface IRoutes {
     component:any
   }>
 }
+
+// 个人信息数据类型
+export interface IPerson {
+  userid?: "",
+  username?: "",
+  sex?: "",
+  ziwei?: "",
+  zhiwei?: "",
+  louceng?: "",
+  address?: "",
+  nianzi?: "",
+  chu?: "",
+  bu?: "",
+  group1?: "",
+  group2?: "",
+  group3?: "",
+  workdate?: "",
+  birthday?: "",
+  phone?: "",
+  zhanScore?:"",
+  rewards?:'',
+  date?:'',
+  rewardsdata?:'',
+  rewardsresult?:'',
+  note?:'',
+  message?:'',
+}
+

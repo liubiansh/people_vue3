@@ -6,20 +6,20 @@ export interface IskillDetail{
 }
 
 // 登录接口需要携带的参数类型
-export interface loginI {
+export interface ILogin {
   userid: string,
   password: string
 }
 
 // 登录接口返回的数据类型
-export interface loginResDataI {
+export interface ILoginRes {
   code: number,
+  message: string,
   data: {
     token?:string
     message?:string
   }
 }
-
 // 定义服务器返回用户信息相关的数据类型
 export interface userResDataI {
   code:number

@@ -1,35 +1,39 @@
 <template>
   <div class="home">
-    <div class="top">
-      <img src="@/assets/images/吴彦祖.jpg" alt="照片" class="photo">
-      <div class="wordlist">
-        <ul>  
+    <el-row>
+      <el-col :span="6" class="photo">
+        <img src="@/assets/images/吴彦祖.jpg" alt="照片">
+      </el-col>
+      <el-col :span="6" class="wordlist">
+        <ul>
           <!-- 每次遍历的时候添加上对应的数据 -->
-          <li v-for="(value,key) in data[0]" :key="key">
+          <li v-for="(value, key) in data[0]" :key="key">
             <span>{{ value }}</span>
             <span class="listNumber">{{ messageList[key] }}</span>
           </li>
         </ul>
-      </div>
-      <div class="wordlist">
+      </el-col>
+      <el-col :span="7" class="wordlist">
         <ul>
-          <li v-for="(value,key,index) in data[1]" :key="key">
+          <li v-for="(value, key, index) in data[1]" :key="key">
             <!-- 通过遍历动态添加类名 -->
-            <span :class="{'n2': index < 2}">{{ value }}</span>
-            <span class="listNumber" >{{ messageList[key] }}</span>
+            <span :class="{ 'n2': index < 2 }">{{ value }}</span>
+            <span class="listNumber">{{ messageList[key] }}</span>
           </li>
         </ul>
-      </div>
-      <div class="fight">
+      </el-col>
+      <el-col :span="3" class="fight">
         <h2>戰力值：</h2>
         <div class="fight-number">{{ messageList.zhanScore }}</div>
-      </div>
-    </div>
+      </el-col>
+    </el-row>
+    <el-row></el-row>
+    <el-row></el-row>
     <div class="container">
       <div class="table-name">獎懲記錄:</div>
       <table class="punish">
         <tr>
-          <th v-for="(item) in data[2]">{{item}}</th>
+          <th v-for="(item) in data[2]">{{ item }}</th>
         </tr>
         <tr>
           <td>H1234567</td>
@@ -46,10 +50,10 @@
       </table>
     </div>
     <div class="container">
-      <div class="table-name">工作履歷</div>
+      <div class="table-name">工作履歷:</div>
       <table class="history">
         <tr>
-          <th v-for="(item) in data[3]">{{item}}</th>
+          <th v-for="(item) in data[3]">{{ item }}</th>
         </tr>
         <tbody>
           <tr>
@@ -68,102 +72,97 @@
 </template>
 
 <script setup lang="ts" name="home">
-  import { apiUserInfo } from '@/api/user/initApi';
-  import type { IPerson } from '@/types/indexTypes';
-  import { onMounted, reactive } from 'vue';
-  const data = [
-    // 左边的列表
-    {
-      userid:'工號：',
-      username:'姓名：',
-      sex:'性別：',
-      ziwei:'資位：',
-      zhiwei:'職位：',
-      louceng:'樓層：',
-      address:'籍貫：',
-      nianzi:'年資：'
-    },
-    // 右边的列表
-    {
-      chu: "事業處：",
-      bu: "事業部：",
-      group1: "團隊一級：",
-      group2: "團隊二級：",
-      group3: "團隊三級：",
-      workdate: "入廠日期：",
-      birthday: "出生日期：",
-      phone: "聯繫方式：",
-    },
-    // 奖惩表格
-    {
-      userid:'工號',
-      username:'姓名',
-      group1: "團隊一級",
-      group2: "團隊二級",
-      group3: "團隊三級",
-      date:'日期',
-      rewards:'奖惩',
-      rewardsdata:'奖惩原因',
-      rewardsresult:'奖惩结果',
-      note:'备注',
-    },
-    // 工作履历
-    {
-      userid:'工號',
-      username:'姓名',
-      group1: "團隊一級",
-      group2: "團隊二級",
-      group3: "團隊三級",
-      date:'日期',
-      message:'详细信息'
-    }
-  ]
-  let messageList:IPerson = reactive({})
-  
+import { apiUserInfo } from '@/api/common/home';
+import type { IPerson } from '@/types/indexTypes';
+import { onMounted, reactive } from 'vue';
+const data = [
+  // 左边的列表
+  {
+    userid: '工號：',
+    username: '姓名：',
+    sex: '性別：',
+    ziwei: '資位：',
+    zhiwei: '職位：',
+    louceng: '樓層：',
+    address: '籍貫：',
+    nianzi: '年資：'
+  },
+  // 右边的列表
+  {
+    chu: "事業處：",
+    bu: "事業部：",
+    group1: "團隊一級：",
+    group2: "團隊二級：",
+    group3: "團隊三級：",
+    workdate: "入廠日期：",
+    birthday: "出生日期：",
+    phone: "聯繫方式：",
+  },
+  // 奖惩表格
+  {
+    userid: '工號',
+    username: '姓名',
+    group1: "團隊一級",
+    group2: "團隊二級",
+    group3: "團隊三級",
+    date: '日期',
+    rewards: '奖惩',
+    rewardsdata: '奖惩原因',
+    rewardsresult: '奖惩结果',
+    note: '备注',
+  },
+  // 工作履历
+  {
+    userid: '工號',
+    username: '姓名',
+    group1: "團隊一級",
+    group2: "團隊二級",
+    group3: "團隊三級",
+    date: '日期',
+    message: '详细信息'
+  }
+]
+let messageList: IPerson = reactive({})
 
-  // 在页面开始挂载时触发
-  onMounted(async ()=>{
-    messageList = Object.assign(messageList,(await apiUserInfo()).data)
- })
+// 在页面开始挂载时触发
+onMounted(async () => {
+  messageList = Object.assign(messageList, (await apiUserInfo()).data)
+})
 </script>
 
 <style scoped>
 /* 上半部分设置 */
-.top {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 40px;
-}
 .photo {
-  width: 200px;
-  height: 100%;
-  margin: 30px;
-  border: 2px solid black;
+  padding: 30px;
+  & img {
+    border: 2px solid #666;
+  }
 }
+
 .wordlist {
   min-width: 190px;
-  font-size: 16px;
-  height: 100%;
+  padding: 10px 65px;
   display: flex;
   flex-direction: column;
   line-height: 25px;
-  padding: auto 0;
-  & ul{
+
+  & ul {
     padding-top: 40px;
-    & li{
+
+    & li {
       padding: 2px 0;
     }
   }
 }
+
 .fight {
-  margin: auto 0;
+  margin: auto 45px;
   border-radius: 20px;
-  width: 130px;
   text-align: center;
   position: relative;
-  margin-right: 30px;
+
   &::before,
-  &::after{
+  &::after {
     content: '';
     position: absolute;
     height: 100%;
@@ -175,47 +174,58 @@
     left: -2px;
     z-index: -1;
   }
-  &::after{
+
+  &::after {
     filter: blur(30px);
   }
 }
+
 .fight-number {
   font-size: 50px;
   background-color: #6666;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
 }
-.listNumber,
-td{
+
+.listNumber {
   margin-left: 5px;
   color: #666;
 }
-.n2{
+
+.n2 {
   margin-left: 16px;
 }
+
 /* 下半部分设置 */
-.container{
+.container {
   margin-top: 20px;
-}
-.table-name {
-  font-weight: bold;
-  font-size: 30px;
-}
-table {
-  text-align: center;
-  vertical-align: middle;
-  font-size: 15px;
-  background-color:#313131;
-  width: 100%;
-  min-width: 800px;
-}
-th{
-  font-size: 20px;
-}
-td,
-th {
-  height: 35px;
-  color: #fff;
-  border-bottom: 1px #fff solid;
+
+  & .table-name {
+    font-weight: bold;
+    font-size: 30px;
+    margin-bottom: 10px;
+  }
+
+  & table {
+    text-align: center;
+    background-color: #ffffff;
+    width: 100%;
+    min-width: 800px;
+    color: #606266;
+
+    & th {
+      font-size: 20px;
+      color: #909399;
+      font-weight: bold;
+    }
+
+    & td,
+    th {
+      vertical-align: middle;
+      height: 35px;
+      border-bottom: 1px #ebeef5 solid;
+      border-right: 1px #ebeef5 solid;
+    }
+  }
 }
 </style>

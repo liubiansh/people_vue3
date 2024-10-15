@@ -1,6 +1,6 @@
 import { ref } from "vue";
-import { apiSkillList } from '@/api/user/clickApi'
 import type { IParams } from '@/types/indexTypes'
+import { apiSkillList } from "@/api/common/perskidetail";
 
 
 export default function () {

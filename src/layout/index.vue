@@ -6,7 +6,7 @@
       <!-- logo 组件-->
       <Logo></Logo>
       <!-- 滚动组件 -->
-      <el-scrollbar class="scrollbar" :class="{ fold: useLayoutSettingStore().fold }">
+      <el-scrollbar class="scrollbar">
         <!-- 菜单 -->
         <!-- 默认激活的页面为路由的当前路径 -->
         <el-menu :collapse="useLayoutSettingStore().fold" :router="true" :default-active="$route.path"
@@ -16,9 +16,11 @@
         </el-menu>
       </el-scrollbar>
     </div>
+    <!-- 顶部导航 -->
     <div class="layout_tabbar" :class="{ fold: useLayoutSettingStore().fold }">
       <Tabbar></Tabbar>
     </div>
+    <!-- 内容展示区 -->
     <div class="layout_main" :class="{ fold: useLayoutSettingStore().fold }">
       <Main></Main>
     </div>
@@ -70,7 +72,6 @@ onMounted(() => {
         border: none;
       }
     }
-
     &.fold {
       width: $base-menu-min-width;
     }

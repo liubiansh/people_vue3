@@ -6,9 +6,9 @@ import { ref } from "vue"
 export const useLayoutSettingStore = defineStore('SettingStore',() => {
   // 控制侧边栏是否折叠，默认不折叠
   let fold = ref(false)
-  let refsh = ref(false)
+  let refresh = ref(false)
 
   return {
-    fold,refsh
+    fold,refresh
   }
 })

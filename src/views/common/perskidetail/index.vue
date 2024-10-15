@@ -1,209 +1,172 @@
 <template>
-  <div class="perskidetail">
-    <!-- 顶部复选框搜索栏 -->
-    <div class="top-nav">
-      <table class="table-nav">
-        <tr>
-          <th v-for="(item, index) in options" :key="index">{{ item }}</th>
-        </tr>
-        <tr>
-          <td>
-            <el-select class="top-select" v-model="skillType" placeholder="全部">
-              <el-option v-for="item in skillTypeData" :key="item.value" :label="item.label" :value="item.value" />
+  <div class="per-ski-detail">
+    <el-card>
+      <el-table header-align="center"  empty-text="暂无数据" :data="data">
+        <el-table-column align="center" v-for="(selectConfig, index) in selectConfigs" :key="index" :label="selectConfig.label">
+          <template #default>
+            <el-select v-model="selectedValues[index]" :placeholder="selectConfig.placeholder">
+              <el-option v-for="option in selectConfig.options" :key="option.value" :label="option.label"
+                :value="option.value" />
             </el-select>
-          </td>
-          <td>
-            <el-select class="top-select" v-model="equipmentType" placeholder="全部">
-              <el-option v-for="item in equipmentTypeData" :key="item.value" :label="item.label" :value="item.value" />
-            </el-select>
-          </td>
-          <td>
-            <el-select class="top-select" v-model="equipmentModel" placeholder="全部">
-              <el-option v-for="item in equipmentModelData" :key="item.value" :label="item.label" :value="item.value" />
-            </el-select>
-          </td>
-          <td>
-            <el-select class="top-select" v-model="skillLevel" placeholder="全部">
-              <el-option v-for="item in skillLevelOptions" :key="item.value" :label="item.label" :value="item.value" />
-            </el-select>
-          </td>
-          <td>
-            <el-select class="top-select" v-model="compulsory" placeholder="全部">
-              <el-option v-for="item in compulsoryOptions" :key="item.value" :label="item.label" :value="item.value" />
-            </el-select>
-          </td>
-          <td>
-            <el-select class="top-select" v-model="evaluationMethod" placeholder="全部">
-              <el-option v-for="item in evaluationMethodOptions" :key="item.value" :label="item.label"
-                :value="item.value" />
-            </el-select>
-          </td>
-          <td>
-            <el-select class="top-select" v-model="evaluationResult" placeholder="全部">
-              <el-option v-for="item in evaluationResultOptions" :key="item.value" :label="item.label"
-                :value="item.value" />
-            </el-select>
-          </td>
-          <td>
-            <button @click="search">查詢</button>
-          </td>
-        </tr>
-      </table>
-    </div>
-    <!-- 内容区 -->
-    <div>
-      <table v-if="mainSkillList && mainSkillList.length > 0" class="main-table">
-        <tr>
-          <th v-for="(item, index) in mainListHeader" :key="index">{{ item }}</th>
-        </tr>
-        <tr v-for="(item, index) in mainSkillList" :key="index">
-          <td>{{ index + 1 }}</td>
-          <td>{{ item.skillType }}</td>
-          <td>{{ item.equipmentType }}</td>
-          <td>{{ item.equipmentModel }}</td>
-          <td>{{ item.skillLevel }}</td>
-          <td>{{ item.skillDetail }}</td>
-          <td>{{ item.compulsory }}</td>
-          <td>{{ item.evaluationMethod }}</td>
-          <td>{{ item.evaluationCount }}</td>
-          <td>{{ item.evaluationResult }}</td>
-          <td>{{ item.examiner }}</td>
-          <td>
-            <button @click="startStudy">開始學習</button>
-          </td>
-          <td>
-            <button @click="startEvaluation">開始考核</button>
-          </td>
-        </tr>
-      </table>
-      <div v-else>
-        <div class="err">未查詢到相關數據，請重試......</div>
-      </div>
-    </div>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="篩選">
+          <template #default>
+            <el-button plain type="primary" @click="search">查询</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
+    <el-card>
+      <el-table id="table2" empty-text="暂无数据" border stripe :data="mainSkillList" size="small">
+        <!-- 用type属性控制显示的内容 -->
+        <el-table-column fixed label="序号" min-width="40" type="index"></el-table-column>
+        <el-table-column prop="skillType" label="技能类型" min-width="80"></el-table-column>
+        <el-table-column prop="equipmentType" label="设备类型" min-width="80"></el-table-column>
+        <el-table-column prop="equipmentModel" label="设备型号" min-width="80"></el-table-column>
+        <el-table-column prop="skillLevel" label="技能等级" min-width="70"></el-table-column>
+        <el-table-column prop="skillDetail" label="技能详情" min-width="140"></el-table-column>
+        <el-table-column prop="compulsory" label="是否必修" min-width="80"></el-table-column>
+        <el-table-column prop="evaluationMethod" label="考核方式" min-width="80"></el-table-column>
+        <el-table-column prop="evaluationCount" label="考核次数" min-width="80"></el-table-column>
+        <el-table-column prop="evaluationResult" label="考核结果" min-width="80"></el-table-column>
+        <el-table-column prop="examiner" label="考核人" min-width="70"></el-table-column>
+        <el-table-column label="学习">
+          <template #default>
+            <el-button plain type="primary" size="small" @click="startStudy">开始学习</el-button>
+          </template>
+        </el-table-column>
+        <el-table-column label="考核">
+          <template #default>
+            <el-button plain type="primary" size="small" @click="startEvaluation">开始考核</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
   </div>
 </template>
 
 <script setup lang="ts" name="perskidetail">
 import { ref, onMounted } from 'vue'
-// 引入从后端获取技能类型等的数据
-import { usePSkillStore } from '@/stores/PersonSkillStore'
 // 引入搜索 hooks
 import useSearch from "@/hooks/useSearch"
-
-// 定义下拉框绑定的数据
-const skillType = ref('')
-const equipmentType = ref('')
-const equipmentModel = ref('')
-const skillLevel = ref('')
-const compulsory = ref('')
-const evaluationMethod = ref('')
-const evaluationResult = ref('')
-// 表头数据
-const mainListHeader = [
-  "序號", "技能類型", "設備類型", "設備型號", "技能等級", "技能明細",
-  "必修否", "考核方式", "考核次數", "考核結果", "考官姓名", "學習", "考核"
-]
-// 下拉框名称
-const options = [
-  "技能類型", "設備類型", "設備型號", "技能等級", 
-  "必修否", "考核方式", "考核結果", "篩選"
-]
-// 技能等级
-const skillLevelOptions = [
-  {
-    value: '',
-    label: '全部'
-  },
-  {
-    value: '初級',
-    label: '初級',
-  },
-  {
-    value: '中級',
-    label: '中級',
-  },
-  {
-    value: '高級',
-    label: '高級',
-  },
-]
-// 必修否
-const compulsoryOptions = [
-  {
-    value: '',
-    label: '全部'
-  },
-  {
-    value: '必修',
-    label: '必修',
-  },
-  {
-    value: '非必修',
-    label: '非必修',
-  },
-]
-// 考核方式
-const evaluationMethodOptions = [
-  {
-    value: '',
-    label: '全部'
-  },
-  {
-    value: '線上考核',
-    label: '線上考核',
-  },
-  {
-    value: '線下考核',
-    label: '線下考核',
-  },
-]
-// 考核结果
-const evaluationResultOptions = [
-  {
-    value: '',
-    label: '全部'
-  },
-  {
-    value: '通過',
-    label: '通過',
-  },
-  {
-    value: '未通過',
-    label: '未通過',
-  },
-]
-
+import { apiEquipmentModel, apiEquipmentType, apiSkillType } from '@/api/common/perskidetail';
 // 使用搜索 hooks
 const { mainSkillList, getSearchList } = useSearch()
-// 使用集中式状态管理器
-const { 
-  getPSkillList,
-  skillTypeData, 
-  equipmentTypeData, 
-  equipmentModelData 
-} = usePSkillStore()
-
-
-// 在挂载后触发调取函数
+// 定义下拉框数据
+let skillTypeData = ref()
+let equipmentTypeData = ref()
+let equipmentModelData = ref()
+// 定义表格数据，数组里有个几个内容表示有几行数据
+const data = ['1']
+// 下拉框配置项
+let selectConfigs = ref([
+  // 技能类型
+  {
+    label: '技能類型',
+    placeholder: '全部',
+    options: skillTypeData
+  },
+  // 设备类型
+  {
+    label: '設備類型',
+    placeholder: '全部',
+    options: equipmentTypeData
+  },
+  // 设备型号
+  {
+    label: '設備型號',
+    placeholder: '全部',
+    options: equipmentModelData
+  },
+  // 技能等级
+  {
+    label: '技能等級',
+    placeholder: '全部',
+    options: [
+      { value: '', label: '全部' },
+      { value: '初級', label: '初級' },
+      { value: '中級', label: '中級' },
+      { value: '高級', label: '高級' },
+    ]
+  },
+  // 必修否
+  {
+    label: '必修否',
+    placeholder: '全部',
+    options: [
+      { value: '', label: '全部' },
+      { value: '必修', label: '必修' },
+      { value: '非必修', label: '非必修' },
+    ]
+  },
+  // 考核方式
+  {
+    label: '考核方式',
+    placeholder: '全部',
+    options: [
+      { value: '', label: '全部' },
+      { value: '線上考試', label: '線上考試' },
+      { value: '線下實操', label: '線下實操' },
+    ]
+  },
+  // 考核结果
+  {
+    label: '考核結果',
+    placeholder: '全部',
+    options: [
+      { value: '', label: '全部' },
+      { value: '通過', label: '通過' },
+      { value: '未通過', label: '未通過' },
+    ]
+  },
+]);
+// 存储下拉框选中的值
+const selectedValues = ref(new Array(selectConfigs.value.length).fill(null));
+// 使用查询函数
+function search() {
+  let searchList: any = {
+    skillType: '',
+    equipmentType: '',
+    equipmentModel: '',
+    skillLevel: '',
+    compulsory: '',
+    evaluationMethod: '',
+    evaluationResult: '',
+  };
+  // 把下拉框选中的值遍历添加到对应的属性中
+  Object.keys(searchList).forEach((key, index) => {
+    if (index < selectedValues.value.length) {
+      searchList[key] = selectedValues.value[index];
+    }
+  });
+  getSearchList(searchList)
+}
+// 获取下拉框数据
+async function getPSkillList() {
+  skillTypeData.value = (await apiSkillType()).data.map((item: any) => ({
+    value: item,
+    label: item
+  }))
+  equipmentTypeData.value = (await apiEquipmentType()).data.map((item: any) => ({
+    value: item,
+    label: item
+  }))
+  equipmentModelData.value = (await apiEquipmentModel()).data.map((item: any) => ({
+    value: item,
+    label: item
+  }))
+  // 定义一个对象并添加在最上面
+  let all = { value: '', label: '全部' }
+  skillTypeData.value.unshift(all)
+  equipmentTypeData.value.unshift(all)
+  equipmentModelData.value.unshift(all)
+}
+// 在挂载后拉取页面数据
 onMounted(() => {
   getPSkillList()
   search()
 })
-
-// 使用查询函数
-function search() {
-  let searchList = {
-    skillType: skillType.value,
-    equipmentType: equipmentType.value,
-    equipmentModel: equipmentModel.value,
-    skillLevel: skillLevel.value,
-    compulsory: compulsory.value,
-    evaluationMethod: evaluationMethod.value,
-    evaluationResult: evaluationResult.value,
-  }
-  getSearchList(searchList)
-}
-
 // 学习函数
 async function startStudy() {
   // 点击进行当前页面的跳转，把视频教材呈现
@@ -215,53 +178,19 @@ function startEvaluation() {
 </script>
 
 <style scoped>
-.top-nav{
-  border-radius: 10px;
-  background-color: #c9d6df6c;
-  padding: 1px 0;
-  box-shadow: 2px 2px 5px #bad7df;
+.el-card {
+  margin-top: 20px;
 }
-.table-nav,
-.main-table {
+
+.el-table {
   width: 100%;
-  min-width: 1000px;
-  margin: 20px 0;
+
+  & .el-button {
+    width: 100%;
+  }
 }
 
-.table-nav th,
-.main-table th {
-  font-weight: 900;
-  font-size: 18px;
-  height: 30px;
-}
-
-.main-table td {
-  text-align: center;
-  height: 22px;
-  font-size: 14px;
-}
-
-.main-table button,
-.table-nav button {
-  border-radius: 5px;
-  width: 95%;
-  min-width: 65px;
-  height: 90%;
-  background-color: #bfa;
-  color: #666;
-  cursor: pointer;
-}
-
-.table-nav button {
-  height: 30px;
-}
-
-.err {
-  font-size: 20px;
-  margin: 20px;
-}
-td,
-th{
-  border-bottom: 1px solid #ccc;
+#table2 {
+  height: 70vh;
 }
 </style>

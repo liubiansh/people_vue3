@@ -8,6 +8,8 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import '@/styles/index.scss'
 import App from './App.vue'
 import router from './router/indexRoute'
+// 引入路由鉴权文件
+import './router/permission'
 
 
 const app = createApp(App)

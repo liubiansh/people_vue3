@@ -4,10 +4,10 @@
     <!-- 行 -->
     <el-row>
       <!-- 列 :span用来设置分栏，总数是24 后面的xs是控制大小参考文档 -->
-      <el-col :span="12" :xs="0">
+      <el-col :span="12">
         <img src="@/assets/icons/foxconn.svg">
       </el-col>
-      <el-col :span="12" :xs="24">
+      <el-col :span="12">
         <!-- 用 model属性绑定收集的对象，rules属性定义校验规则 -->
         <el-form class="login-form" :model="loginForm" :rules="rules" ref="loginForms">
           <h1>Hello</h1>
@@ -63,37 +63,27 @@ let loginForm = reactive({ userid: 'H6616040', password: '123456' })
 // 使用 try-catch方法来进行结果的处理
 const login = async () => {
   // 保证全部的表单项校验全部通过才能发请求
-  await  loginForms.value.validate()
-
+  await loginForms.value.validate()
   // 让按钮开始加载 
   loading.value = true
   try {
     // 可以用.then也可以用这个
     await useStore.useLogin(loginForm);
-    // 获取用户信息
-    await useStore.getUserInfo()
-    // 存储到本地
-    localStorage.setItem('username',useStore.username)
     // 如果请求成功就用编程式导航跳转到指定位置
     // 判断登录时，路由路径是否有query参数，有就去，没有就去首页
     let redirect = $route.query.redirect;
     router.push({ path: redirect as string || '/home' });
+    // 获取用户信息
+    await useStore.getUserInfo()
     // 登录成功的提示信息
     ElNotification({
-      type:"success",
-      message:'登录成功',
+      type: "success",
+      message: '登录成功',
       // 显示当前时间段
-      title:`hi,${getTime()}好 【${useStore.username}】`
+      title: `hi,${getTime()}好 【${useStore.username}】`
     })
     loading.value = false
-  } catch (error:any) {
-    console.log(error.message);
-    
-    // 登录失败的提示信息
-    ElNotification({
-      type:'error',
-      message:error.message
-    }) 
+  } catch (error: any) {
     loading.value = false
   }
 }
@@ -125,35 +115,37 @@ const rules = {
   height: 100vh;
   background: url('@/assets/images/background.jpg') no-repeat;
   background-size: cover;
-}
-img{
+
+  img {
     width: 30%;
     margin: 30px;
+    min-width: 150px;
   }
 
-.login-form {
-  position: relative;
-  width: 60%;
-  top: 30vh;
-  background: url("@/assets/images/login_form.png") no-repeat;
-  background-size: cover;
-  padding: 40px;
-  height: 30%;
+  .login-form {
+    position: relative;
+    width: 60%;
+    top: 30vh;
+    background: url("@/assets/images/login_form.png") no-repeat;
+    background-size: cover;
+    padding: 40px;
+    height: 30%;
 
-  
-  h1 {
-    color: white;
-    font-size: 40px;
+
+    h1 {
+      color: white;
+      font-size: 40px;
+    }
+
+    h2 {
+      color: white;
+      font-size: 20px;
+      margin: 10px 0;
+    }
+
+    .login-btn {
+      width: 100%;
+    }
   }
-
-  h2 {
-    color: white;
-    font-size: 20px;
-    margin: 10px 0;
-  }
-}
-
-.login-btn {
-  width: 100%;
 }
 </style>

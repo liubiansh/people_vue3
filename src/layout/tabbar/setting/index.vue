@@ -11,7 +11,7 @@
   <el-dropdown>
     <span class="el-dropdown-link">
       <!-- 使用用户相关的仓库进行展示对应的名字 -->
-      {{ useUserStore().username || username }}
+      {{ useUserStore().username }}
       <el-icon class="el-icon--right">
         <arrow-down />
       </el-icon>
@@ -33,41 +33,48 @@ import { useUserStore } from '@/stores/modules/user';
 import router from '@/router/indexRoute';
 // 获取路由对象
 import { useRoute } from 'vue-router';
+import { ElMessage } from 'element-plus';
 
 // 使用设置小仓库
 let useStore = useLayoutSettingStore();
 // 使用路由组件
 let $route = useRoute();
-let username = localStorage.getItem('username');
+// 从本地访问用户名字 
+// let username = localStorage.getItem('username');
+
 
 // 刷新按钮点击回调
 const flash = () => {
   // 把仓库的数据修改下,用于实现当数据改变时进行页面的重新渲染
-  useStore.refsh = !useStore.refsh
+  useStore.refresh = !useStore.refresh
 }
 // 全屏按钮点击回调
 const fullScreen = () => {
   // DOM的属性，用来判断当前是否为全屏状态，全屏：真，不是：null
   let full = document.fullscreenElement;
   // 切换为全屏模式
-  if(!full){
+  if (!full) {
     // 这个方法可以直接把页面变为全屏
     document.documentElement.requestFullscreen();
-  }else{
+  } else {
     // 取消全屏
     document.exitFullscreen();
   }
 }
 // 退出按钮回调
-const loginout = () =>{
-  // 向服务器发请求，清除token
-  // 仓库中关于用户的信息清空
-  useUserStore().loginout()
+const loginout = () => {
+  // 请求退出登录
+  useUserStore().logout()
   // 跳转登录页面 
   router.replace({
-    path:'/login',
+    path: '/login',
     // 在这里带的是跳转到login页面携带的参数，方便登录之后重新进入退出前的页面
-    query:{redirect:$route.path}
+    query: { redirect: $route.path }
+  })
+  // 提示信息
+  ElMessage({
+    message: '已成功退出登录',
+    type: 'success'
   })
 }
 </script>

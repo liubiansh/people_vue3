@@ -1,7 +1,5 @@
 import * as echarts from 'echarts';
-
 export function useEcharts() {
-
   let chartInstance: any = null
   // svg矢量图
   const initSEcharts = (domElement: any) => {
@@ -10,15 +8,13 @@ export function useEcharts() {
     });
     return chartInstance;
   };
-
   // canvas图
   const initCEcharts = (domElement: any) => {
     chartInstance = echarts.init(domElement);
     return chartInstance;
   };
-
-  // 定义基础的数据
-  const commonOptions = {
+  // 基础配置项
+  const commonBarOptions = {
     textStyle: {
       color: '#333'
     },
@@ -32,10 +28,10 @@ export function useEcharts() {
       axisLabel: { interval: 0 }
     }
   };
-  // 定义好数据格式直接传进来即可
+  // 基础柱状图
   const setBasicBar = (chartInstance: any, sourceArray: string[][], titleText: string, subtext?: string,) => {
     const options = {
-      ...commonOptions,
+      ...commonBarOptions,
       title: {
         text: titleText || '',
         subtext: subtext || '',
@@ -81,60 +77,107 @@ export function useEcharts() {
       chartInstance.setOption(options);
     }
   };
-
-  const setSimDataset = (chartInstance: any, sourceArray: string[][], bar: string[], titleText: string, subtext?: string,) => {
+  // 数据集柱状图（可带折线图）
+  const setSimDataset = (chartInstance: any, sourceArray: string[][], titleText: string, line?: boolean, unit?: string, subtext?: string) => {
+    // 全局提示框配置项
+    const tooltipOptions = line ? {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'cross',
+        crossStyle: {
+          color: '#999'
+        }
+      }
+    } : {};
+    // Y轴配置项
+    const yAxisOptions = unit ? {
+      axisLabel: {
+        formatter: '{value}' + unit
+      }
+    } : {};
+    // X轴配置项
+    const xAxisOptions = line ? {
+      type: 'category',
+      axisPointer: {
+        type: 'shadow',
+        shadowStyle: {
+          color: "#409eff22"
+        }
+      }
+    } : {};
+    // 系列提示框配置项
+    const seriesToolTip = unit ? {
+      valueFormatter: function (value: number) {
+        return value + unit;
+      }
+    } : {}
+    // 数据基础配置
+    const label = {
+      show: true,
+      position: 'top',
+      color: "#666",
+      fontSize: 11,
+    }
+    // 柱状图配置项
+    const seriesBar = {
+      type: 'bar',
+      label: unit ? {
+        ...label,
+        formatter: function (params: any) {
+          return params.value[params.encode.y[0]] + unit 
+        }
+      } : label,
+      tooltip: seriesToolTip,
+    }
+    // 折线图配置项
+    const seriesLine = {
+      type: 'line',
+      label: unit ? {
+        ...label,
+        formatter: function (params: any) {
+          return params.data[4] + unit
+        }
+      } : label,
+      tooltip: seriesToolTip,
+    }
+    // 总系列设置
+    const seriesOptions = line ? [seriesBar, seriesBar, seriesBar, seriesLine] : [seriesBar, seriesBar, seriesBar];
+    // 总配置项
     const options = {
-      ...commonOptions,
+      ...commonBarOptions,
+      // 标题，可选副标题
       title: {
         text: titleText,
-        left: 'center'
+        left: 'center',
+        top: '2%',
+        subtext: subtext,
+        subtextStyle: {
+          lineHeight: 16
+        }
       },
+      // 图形的位置
+      grid: {
+        top: "30%"
+      },
+      // 小图例在图形中的位置
       legend: {
-        right: 0, // 放在右侧
-        orient: 'vertical' // 垂直布局
+        right: '1%',
+        top: '2%',
+        orient: 'vertical'
       },
-      tooltip: {},
+      tooltip: tooltipOptions,
       dataset: {
-        dimensions: ['product', ...bar],
         source: sourceArray
       },
-      yAxis: {},
-      series: [
-        {
-          type: 'bar',
-          label: {
-            show: true,
-            position: 'top', // 可以设置为'top'、'bottom'、'left'、'right'、'center'等，表示标签的位置
-            color: "#666",
-            fontSize: 9
-          }
-        },
-        {
-          type: 'bar',
-          label: {
-            show: true,
-            position: 'top', // 可以设置为'top'、'bottom'、'left'、'right'、'center'等，表示标签的位置
-            color: "#666",
-            fontSize: 9
-          }
-        },
-        {
-          type: 'bar',
-          label: {
-            show: true,
-            position: 'top', // 可以设置为'top'、'bottom'、'left'、'right'、'center'等，表示标签的位置
-            color: "#666",
-            fontSize: 9
-          }
-        },
-      ]
+      yAxis: yAxisOptions,
+      xAxis: xAxisOptions,
+      series: seriesOptions
     };
     if (chartInstance) {
       chartInstance.setOption(options);
     }
   }
-
-  // 四、更新图表数据
+  // 更新图表数据
   const updateData = (newData: any) => {
     if (chartInstance) {
       const options = chartInstance.getOption();
@@ -142,15 +185,13 @@ export function useEcharts() {
       chartInstance.setOption(options);
     }
   };
-
-  // 五、销毁图表
+  // 销毁图表
   const unmountChart = () => {
     if (chartInstance) {
       chartInstance.dispose();
       chartInstance = null
     }
   };
-
   return {
     initSEcharts,
     initCEcharts,

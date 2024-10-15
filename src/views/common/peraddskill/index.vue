@@ -1,68 +1,73 @@
 <template>
-  <div class="peraddskill">
-    <!-- 可以学习的列表 -->
-    <div class="skill-box">
-      <h2>{{ h2[0] }}</h2>
-      <!-- <span>點擊添加按鈕將左邊選中的技能添加到右邊待加入區</span> -->
-      <div class="skill-box-table">
-        <table>
-          <th v-for="(item, index) in tableHead" :key="index">{{ item }}</th>
-          <tr @click="getSkill(item, index)" v-for="(item, index) in allTable" :key="index"
-            :class="{ active: isRowActive(index) }">
-            <td>{{ index + 1 }}</td>
-            <td>{{ item.skillType }}</td>
-            <td>{{ item.equipmentType }}</td>
-            <td>{{ item.equipmentModel }}</td>
-            <td @click.stop><el-button @click="remSkill(index)" size="small" type="primary" plain
-                title="点击添加到右侧待添加区">>></el-button>
-            </td>
-          </tr>
-        </table>
+  <el-row class="per-add-skill">
+    <el-col :span="6">
+      <!-- 可以学习的列表 -->
+      <div class="skill-box">
+        <h2>{{ h2[0] }}</h2>
+        <!-- <span>點擊添加按鈕將左邊選中的技能添加到右邊待加入區</span> -->
+        <div class="skill-box-table">
+          <table>
+            <th v-for="(item, index) in tableHead" :key="index">{{ item }}</th>
+            <tr @click="getSkill(item, index)" v-for="(item, index) in allTable" :key="index"
+              :class="{ active: isRowActive(index) }">
+              <td>{{ index + 1 }}</td>
+              <td>{{ item.skillType }}</td>
+              <td>{{ item.equipmentType }}</td>
+              <td>{{ item.equipmentModel }}</td>
+              <td @click.stop><el-button @click="remSkill(index)" size="small" type="primary" plain
+                  title="点击添加到右侧待添加区">>></el-button>
+              </td>
+            </tr>
+          </table>
+        </div>
       </div>
-    </div>
-    <!-- 选中区 -->
-    <div class="study-box">
-      <h2>{{ h2[1] }}</h2>
-      <div class="study-box-table">
-        <table>
-          <th v-for="(item, index) in tableHead" :key="index">{{ item }}</th>
-          <tr v-for="(item, index) in studyTable" :key="index">
-            <td>{{ index + 1 }}</td>
-            <td>{{ item.skillType }}</td>
-            <td>{{ item.equipmentType }}</td>
-            <td>{{ item.equipmentModel }}</td>
-            <td v-if="item">
-              <el-button @click="delSkill" title="删除所选技能" size="small" type="danger" :icon="Delete" />
-            </td>
-          </tr>
-        </table>
-        <el-button class="add" title="将所选技能添加为待学技能" type="primary" plain @click="commitSkill">確認添加</el-button>
+    </el-col>
+    <el-col :span="6">
+      <!-- 选中区 -->
+      <div class="study-box">
+        <h2>{{ h2[1] }}</h2>
+        <div class="study-box-table">
+          <table>
+            <th v-for="(item, index) in tableHead" :key="index">{{ item }}</th>
+            <tr v-for="(item, index) in studyTable" :key="index">
+              <td>{{ index + 1 }}</td>
+              <td>{{ item.skillType }}</td>
+              <td>{{ item.equipmentType }}</td>
+              <td>{{ item.equipmentModel }}</td>
+              <td v-if="item">
+                <el-button @click="delSkill" title="删除所选技能" size="small" type="danger" :icon="Delete" />
+              </td>
+            </tr>
+          </table>
+          <el-button class="add" title="将所选技能添加为待学技能" type="primary" plain @click="commitSkill">確認添加</el-button>
+        </div>
       </div>
-    </div>
-    <!-- 选中区的详细信息展示 -->
-    <div class="message-box">
-      <h2>{{ h2[2] }}</h2>
-      <div class="message-box-table">
-        <table>
-          <th v-for="(item, index) in messageHead" :key="index">{{ item }}</th>
-          <tr v-for="(item, index) in skillTable" :key="index">
-            <td>{{ index + 1 }}</td>
-            <td>{{ item.skillType }}</td>
-            <td>{{ item.equipmentType }}</td>
-            <td>{{ item.equipmentModel }}</td>
-            <td>{{ item.skillLevel }}</td>
-            <td>{{ item.skillDetail }}</td>
-            <td>{{ item.evaluationMethod }}</td>
-          </tr>
-        </table>
+    </el-col>
+    <el-col :span="12">
+      <!-- 选中区的详细信息展示 -->
+      <div class="message-box">
+        <h2>{{ h2[2] }}</h2>
+        <div class="message-box-table">
+          <table>
+            <th v-for="(item, index) in messageHead" :key="index">{{ item }}</th>
+            <tr v-for="(item, index) in skillTable" :key="index">
+              <td>{{ index + 1 }}</td>
+              <td>{{ item.skillType }}</td>
+              <td>{{ item.equipmentType }}</td>
+              <td>{{ item.equipmentModel }}</td>
+              <td>{{ item.skillLevel }}</td>
+              <td>{{ item.skillDetail }}</td>
+              <td>{{ item.evaluationMethod }}</td>
+            </tr>
+          </table>
+        </div>
       </div>
-    </div>
-  </div>
+    </el-col>
+  </el-row>
 </template>
 
 <script setup lang="ts" name="peraddskill">
-import { apiSkilldetail, apiAddskill } from "@/api/user/clickApi";
-import { apiSkillInventory } from "@/api/user/initApi";
+import { apiAddskill, apiSkilldetail, apiSkillInventory } from "@/api/common/peraddskill";
 import type { IParams } from "@/types/indexTypes";
 import { Delete } from "@element-plus/icons-vue"
 import { ElMessage } from "element-plus";
@@ -125,7 +130,7 @@ function delSkill(index: number) {
 // 把待添加区的数据提交给数据库
 let commitSkill = async function () {
   // 判断数据长度
-  if(studyTable.value.length !== 0){
+  if (studyTable.value.length !== 0) {
     let data = await apiAddskill(studyTable.value)
     // 如果没有返回结果，即为添加失败，跳出
     if (data) {
@@ -133,7 +138,7 @@ let commitSkill = async function () {
     }
     studyTable.value.length = 0
     getAllList()
-  }else{
+  } else {
     return ElMessage({
       type: 'error',
       message: '请选择技能'
@@ -143,15 +148,12 @@ let commitSkill = async function () {
 </script>
 
 <style scoped>
-.peraddskill {
-  display: flex;
-  justify-content: space-evenly;
-  align-items: flex-start;
-  /* border: 1px #fff solid; */
+.per-add-skill {
   color: #000;
   background: #e3fdfd;
-  box-shadow: 0 1px 6px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
-
+  box-shadow: 0 1px 6px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06);
+  width: 100%;
+  height: 100vh;
 }
 
 h2 {
@@ -164,12 +166,12 @@ h2 {
 .message-box {
   flex: 1;
   margin: 10px 5px;
-  margin-bottom: 0;
 }
 
 .skill-box,
 .study-box {
-  max-width: 240px;
+  width: 100%;
+  min-width: 240px;
 }
 
 .skill-box-table,
@@ -179,7 +181,8 @@ h2 {
   border-left: #000 1px solid;
   border-right: #000 1px solid;
   border-top: #000 1px solid;
-  margin: 10px 0;
+  margin: 10px 5px;
+  margin-left: 0;
 }
 
 table {
@@ -200,6 +203,7 @@ th {
   font-size: 13px;
   font-weight: 600;
 }
+
 td {
   height: 20px;
   line-height: 20px;

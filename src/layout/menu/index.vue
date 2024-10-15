@@ -31,11 +31,6 @@
         </el-icon>
         <span>{{ item.meta.title }}</span>
       </template>
-      <!--  
-        当有两个及以上的子路由时，其每个子路由可能会有更多的子路由，
-          所以要使用递归的方法，让其自己调用自己进行创建
-        也就相当于在这里又用了一次自己这个组件
-      -->
       <!-- 传进去的值为遍历到的儿子项，会无限递归下去 -->
       <Menu :menuList="item.children"></Menu>
     </el-sub-menu>

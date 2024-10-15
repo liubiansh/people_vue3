@@ -28,46 +28,47 @@ request.interceptors.request.use((config) => {
 // 第三步：响应拦截器
 request.interceptors.response.use((response) => {
   // console.log(response);
-  
+
   // 成功回调，进行简化数据
   if (response.status === 200) {
     return response.data
   } else if (response.status === 208) {
+    // 技能重复添加
     ElMessage({
       type: 'error',
       message: response.data.message
     })
     return ElMessage
   } else {
-    return {
-      '状态码：': response.status,
-      '错误信息：': response.data.message
-    }
+    ElMessage({
+      type: 'error',
+      message: response.data?.message
+    })
+    return ElMessage
   }
-
 }, (error) => {
   // 失败的回调：处理 http网络错误
   // 定义一个变量：存储网络错误信息
-  
   let message = '';
   // http状态码
-  let status = error.response.status;
-  switch (status) {
-    case 401:
-      message = 'TOKEN过期'
-      break;
-    case 403:
-      message = '无权访问'
-      break;
-    case 404:
-      message = '请求地址错误'
-      break
-    case 500:
-      message = '服务器出现问题'
-      break;
-    default:
-      message = '网络出现问题'
-      break;
+  let status = error.response?.status;
+  if (status === undefined) {
+    message = '网络请求超时,请稍后重试'
+  } else {
+    switch (status) {
+      case 401:
+        message = '登录凭证过期，请重新登录'
+        break;
+      case 403:
+        message = '无权访问'
+        break;
+      case 404:
+        message = '请求地址错误'
+        break
+      case 500:
+        message = '服务器过载，请稍后重试'
+        break;
+    }
   }
   // 显示错误信息
   ElMessage({

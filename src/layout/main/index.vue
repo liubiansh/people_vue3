@@ -2,10 +2,7 @@
   <!-- 用插槽的形式展示内容 -->
   <RouterView v-slot="{ Component }">
     <!-- 外侧用动画标签包裹 -->
-     <!-- 当主页面点击刷新按钮时，会改变仓库里这个变量的值，用:key的方式来监听，
-          当监听的值发生改变时，会重新渲染页面 
-     -->
-    <transition name="fade" :key="useLayoutSettingStore().refsh">
+    <transition name="fade" :key="key">
       <component :is="Component"/>
     </transition>
   </RouterView>
@@ -13,7 +10,10 @@
 
 <script setup lang="ts" name="layout-main">
 import { useLayoutSettingStore } from '@/stores/modules/setting';
+import { computed } from 'vue';
 
+// 定义一个计算属性，监听仓库里refsh的值，当值改变时，key的值也会改变，进而重新渲染页面
+let key = computed(() => JSON.stringify(useLayoutSettingStore().refresh));
 </script>
 
 <style scoped>
